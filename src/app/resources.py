@@ -1,12 +1,13 @@
 from abc import ABCMeta, abstractmethod
 from sqlalchemy.exc import SQLAlchemyError
-
+from marshmallow import ValidationError
 from flask_restful import Resource, reqparse
 
 from . import Session
 from . import User
 from . import PasswordSchema, UserSchema
 from . import Password
+
 
 session = Session()
 
@@ -80,9 +81,11 @@ class UserListResource(Resource):
         # parser.add_argument('phone', type=str, help='')
         args = parser.parse_args()
         schema = UserSchema()
-
-        result = schema.load(args)
-        # return {'message': result.errors}, 400, {'Access-Control-Allow-Origin': '*'}
+        try:
+            user = schema.load(args)
+        except ValidationError as error:
+            return {'message': str(error)}, 400, {'Access-Control-Allow-Origin': '*'}
+        return {'message': 'successfull reg'}, 200, {'Access-Control-Allow-Origin': '*'}
         if not result.errors:
             msg = result.errors
             status = 400
