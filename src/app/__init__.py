@@ -3,6 +3,7 @@ from .config import config
 from .migrate import (create_db, create_tables, create_user, insert_data_in_db,
                       drop_tables)
 from .models import User, Password
+from .shemas import UserSchema, PasswordSchema
 from .resources import Home, Smoke, EntityResource, UserResource, \
     UserListResource, PasswordListResource, PasswordResource
 

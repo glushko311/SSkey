@@ -5,6 +5,7 @@ from flask_restful import Resource, reqparse
 
 from . import Session
 from . import User
+from . import PasswordSchema, UserSchema
 from . import Password
 
 session = Session()
@@ -74,13 +75,16 @@ class UserListResource(Resource):
         parser.add_argument('email', type=str, help='')
         parser.add_argument('username', type=str, help='')
         parser.add_argument('userpass', type=str, help='')
-        parser.add_argument('first_name', type=str, help='')
-        parser.add_argument('last_name', type=str, help='')
-        parser.add_argument('phone', type=str, help='')
+        # parser.add_argument('first_name', type=str, help='')
+        # parser.add_argument('last_name', type=str, help='')
+        # parser.add_argument('phone', type=str, help='')
         args = parser.parse_args()
+        schema = UserSchema()
 
-        if not User.validate_user(args):
-            msg = "REQUIRED DATA NOT VALID OR BLANK"
+        result = schema.load(args)
+        # return {'message': result.errors}, 400, {'Access-Control-Allow-Origin': '*'}
+        if not result.errors:
+            msg = result.errors
             status = 400
         elif session.query(User).filter(User.username == args['username']).first():
             msg = "User with username = {0} already exists".format(args['username'])

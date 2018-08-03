@@ -9,9 +9,9 @@ class UserSchema(Schema):
     userpass = fields.String(required=True)
     salt = fields.String()
     reg_date = fields.DateTime()
-    first_name = fields.String()
-    last_name = fields.String()
-    phone = fields.Integer()
+    first_name = fields.String(required=False)
+    last_name = fields.String(required=False)
+    phone = fields.Integer(required=False)
 
 
 class PasswordSchema(Schema):
